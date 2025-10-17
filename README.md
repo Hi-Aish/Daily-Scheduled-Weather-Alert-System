@@ -36,3 +36,13 @@ This project showcases core foundational skills essential for any automation or 
 | **Start Command** | `docker run -it --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n n8nio/n8n` |
 | **API Used** | OpenWeatherMap |
 | **Telegram Bot** | `@my_n8n_weather_alerts_bot` |
+## 🖼️ Workflow Visualization
+
+This visualization confirms the end-to-end flow from the initial time-based **Trigger** through the **API Integration** and final **Conditional Logic** pathing.
+
+![n8n Workflow Canvas showing the scheduled weather alert process for Agartala.](![workflow_canvas_screenshot](https://github.com/user-attachments/assets/cd22cfe7-1020-490c-8716-9d1fcfbd8ee3)
+)
+
+***Flow Legend:***
+* **Green Path (True):** Executes the full "Rain Alert" message.
+* **Blue Path (False):** Executes the standard "All Clear" message.
