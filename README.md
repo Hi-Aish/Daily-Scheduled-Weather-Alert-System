@@ -40,7 +40,7 @@ This project showcases core foundational skills essential for any automation or 
 
 This visualization confirms the end-to-end flow from the initial time-based **Trigger** through the **API Integration** and final **Conditional Logic** pathing.
 
-![n8n Workflow Canvas showing the scheduled weather alert process for Agartala.](![workflow_canvas_screenshot](https://github.com/user-attachments/assets/cd22cfe7-1020-490c-8716-9d1fcfbd8ee3)
+![n8n Workflow Canvas showing the scheduled weather alert process for Agartala.](![workflow_canvas_screenshot] https://github.com/user-attachments/assets/cd22cfe7-1020-490c-8716-9d1fcfbd8ee3
 )
 
 ***Flow Legend:***
