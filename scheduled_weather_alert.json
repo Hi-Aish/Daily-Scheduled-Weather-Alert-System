@@ -1,0 +1,197 @@
+{
+  "name": "scheduled_weather_alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            },
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        -192
+      ],
+      "id": "e7b5ef3a-87b1-4fcc-a8da-5fed96732d2e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.openweathermap.org/data/2.5/weather?q=Agartala&units=metric&appid=36de7f0ddf1de13e8f31b214125d5ea4",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "93df5f5c-e67d-432a-b184-f6c56b7389c4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42d799f5-4abd-4666-be8f-c17a6384172e",
+              "leftValue": "={{ $json.weather[0].main }}",
+              "rightValue": "Rain",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -144,
+        160
+      ],
+      "id": "e6c1abdc-6305-458f-a75f-a07194bb663c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const weatherData = $json;\nconst temp = weatherData.main.temp; \nconst description = weatherData.weather[0].description;\n\n// Create the urgent alert message\nconst message = \n    `🚨 RAIN ALERT! 🚨\\n\\n` +\n    `Current Temp: ${temp}°C\\n` +\n    `Forecast: ${description.toUpperCase()}\\n` +\n    `ACTION REQUIRED: Don't forget your umbrella! ☔`; \n\n// Return the custom message for the Telegram node\nreturn [{ json: { final_report: message } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        48
+      ],
+      "id": "2426bdfb-bf71-4e1e-a6d3-e07a4b8c0c2d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const weatherData = $json;\nconst temp = weatherData.main.temp; \nconst description = weatherData.weather[0].description;\n\n// Create the simple daily report\nconst message = \n    `✅ All Clear!\\n` +\n    `Temp: ${temp}°C. Forecast: ${description}. Enjoy your day!`; \n\n// Return the default message\nreturn [{ json: { final_report: message } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        288
+      ],
+      "id": "7179e2c9-0135-4a73-9c16-af4e529174c4",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "chatId": "1833031210",
+        "text": "={{ $json.final_report }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        288,
+        192
+      ],
+      "id": "6e140420-9b29-45d8-bff4-0a91c7abb21f",
+      "name": "Send a text message",
+      "webhookId": "6df36710-c37d-486f-9d5e-81360ddc8501",
+      "credentials": {
+        "telegramApi": {
+          "id": "CGDswdOkwNkaMCia",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fe75c239-3ca4-4a2b-bc92-a4e007a6f518",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3161c27c0f03b93495db703f9defcf19b39fbcfbae462f1c6206f8236ca80dd2"
+  },
+  "id": "1nZwzCoxRigtAhs2",
+  "tags": []
+}
